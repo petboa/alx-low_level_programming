@@ -1,3 +1,4 @@
 #!/bin/bash
-wget -P /tmp https://github.com/sammykingx/alx-low_level_programming/raw/main/0x18-dynamic_libraries/hacked.so
-export LD_PRELOAD=/tmp/hacked.so
+gcc -wall -wextra -werror -pedantic -c -fPIC *.c
+gcc -shared -o liball.so *.o
+export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
