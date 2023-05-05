@@ -1,0 +1,10 @@
+#include <stdio.h>
+#include "hash_tables.h"
+
+int main(void)
+{
+    char *s = "hello";
+    unsigned long int hash = hash_djb2((unsigned char *) s);
+    printf("Hash value: %lu\n", hash);
+    return 0;
+}
