@@ -1,66 +1,44 @@
 #include "search_algos.h"
-
-int recurse_helper(int *array, size_t size, size_t step, size_t idx, int val);
-int subrecurse_help(int *array, size_t size, size_t end, size_t idx, int val);
+#include <math.h>
 
 /**
- * jump_search - perform jump search
- * @array: pointer to first elem of array
- * @size: number of elems in array
- * @value: search value
+ * jump_search - searches for a value in an array of
+ * integers using the Jump search algorithm
  *
- * Return: index where value is located; -1 if value not found
+ * @array: input array
+ * @size: size of the array
+ * @value: value to search in
+ * Return: index of the number
  */
 int jump_search(int *array, size_t size, int value)
 {
-	if (array == NULL)
+	int index, m, k, prev;
+
+	if (array == NULL || size == 0)
 		return (-1);
 
-	return (recurse_helper(array, size, sqrt(size), 0, value));
-}
+	m = (int)sqrt((double)size);
+	k = 0;
+	prev = index = 0;
 
-/**
- * recurse_helper - recursive implement of jump search
- * @array: array to search
- * @size: size of array
- * @step: jump increment
- * @idx: current index
- * @val: search value
- *
- * Return: index where value is located; -1 if value not found
- */
-int recurse_helper(int *array, size_t size, size_t step, size_t idx, int val)
-{
-	printf("Value checked array[%lu] = [%d]\n", idx, array[idx]);
+	do {
+		printf("Value checked array[%d] = [%d]\n", index, array[index]);
 
-	/* if value is greater, jump forward */
-	if (((idx + step < size) && array[idx + step] < val))
-		return (recurse_helper(array, size, step, idx + step, val));
+		if (array[index] == value)
+			return (index);
+		k++;
+		prev = index;
+		index = k * m;
+	} while (index < (int)size && array[index] < value);
 
-	/* recurse subarray */
-	printf("Value found between indexes [%lu] and [%lu]\n", idx, (idx + step));
-	return (subrecurse_help(array, size, idx + step, idx, val));
-}
+	printf("Value found between indexes [%d] and [%d]\n", prev, index);
 
-/**
- * subrecurse_help - recursive implement for recursive implement
- * @array: array to search
- * @size: size of array
- * @end: end of subarray
- * @idx: current index
- * @val: search value
- *
- * Return: index where value is located; -1 if value not found
- */
-int subrecurse_help(int *array, size_t size, size_t end, size_t idx, int val)
-{
-	if (idx >= size || idx > end || array[idx] > val)
-		return (-1);
+	for (; prev <= index && prev < (int)size; prev++)
+	{
+		printf("Value checked array[%d] = [%d]\n", prev, array[prev]);
+		if (array[prev] == value)
+			return (prev);
+	}
 
-	printf("Value checked array[%lu] = [%d]\n", idx, array[idx]);
-
-	if (array[idx] == val)
-		return (idx);
-	else
-		return (subrecurse_help(array, size, end, idx + 1, val));
+	return (-1);
 }
